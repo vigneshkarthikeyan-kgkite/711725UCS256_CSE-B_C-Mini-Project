@@ -211,7 +211,7 @@ unsigned int enterChoice(void)
                  "2 - update an account\n"
                  "3 - add a new account\n"
                  "4 - delete an account\n"
-                 "5 - end program\n? ");
+                 "5 - end program\nChoice NO ? : ");
 
     scanf("%u", &menuChoice); // receive choice from user
     return menuChoice;
