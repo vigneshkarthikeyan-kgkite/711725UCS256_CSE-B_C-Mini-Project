@@ -106,7 +106,7 @@ void updateRecord(FILE *fPtr)
     struct clientData client = {0, "", "", 0.0};
 
     // obtain number of account to update
-    printf("%s", "Enter account to update ( 1 - 100 ): ");
+    printf("%s", "Enter account number to update balance : ");
     scanf("%d", &account);
 
     // move file pointer to correct record in file
@@ -123,7 +123,7 @@ void updateRecord(FILE *fPtr)
         printf("%-6d%-16s%-11s%10.2f\n\n", client.acctNum, client.lastName, client.firstName, client.balance);
 
         // request transaction amount from user
-        printf("%s", "Enter charge ( + ) or payment ( - ): ");
+        printf("%s", "Enter the amount to creadit ( + ) or debit ( - ): ");
         scanf("%lf", &transaction);
         client.balance += transaction; // update record balance
 
@@ -131,7 +131,7 @@ void updateRecord(FILE *fPtr)
 
         // move file pointer to correct record in file
         // move back by 1 record length
-        fseek(fPtr, -sizeof(struct clientData), SEEK_CUR);
+        fseek(fPtr, -(long)sizeof(struct clientData), SEEK_CUR);
         // write updated record over old record in file
         fwrite(&client, sizeof(struct clientData), 1, fPtr);
     } // end else
@@ -142,7 +142,21 @@ void deleteRecord(FILE *fPtr)
 {
     struct clientData client;                       // stores record read from file
     struct clientData blankClient = {0, "", "", 0}; // blank client
-    unsigned int accountNum;                        // account number
+    unsigned int accountNum;                        // account number 
+    int password;      
+    
+    //Admin authentication
+    printf("Enter Admin Password : ");
+    scanf("%d", &password);
+
+    if(password != 8124)                            // admin password
+    {
+        printf("Incorrect Password\n");
+        printf("Access Denied! Only Admin can delete account history.\n");
+        return;
+    }
+
+    printf("Admin Access Granted\n");
 
     // obtain number of account to delete
     printf("%s", "Enter account number to delete ( 1 - 100 ): ");
@@ -188,9 +202,9 @@ void newRecord(FILE *fPtr)
     } // end if
     else
     { // create record
-        // user enters last name, first name and balance
-        printf("%s", "Enter lastname, firstname, balance\n? ");
-        scanf("%14s%9s%lf", client.lastName, client.firstName, &client.balance);
+        // user enters first name, last name and balance
+        printf("%s", "Enter firstname , lastname , balance\n? ");
+        scanf("%14s%9s%lf", client.firstName, client.lastName, &client.balance);
 
         client.acctNum = accountNum;
         // move file pointer to correct record in file
